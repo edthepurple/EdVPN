@@ -5,12 +5,17 @@
     "inbounds": [
         {
             "tag": "wireguard",
-            "port": 42300,
+            "port": 8443,
             "protocol": "dokodemo-door",
             "settings": {
                 "address": "127.0.0.1",
-                "port": 42100,
-                "network": "udp"
+                "port": 8443,
+                "network": "tcp,udp"
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": ["http", "tls", "quic"],
+                "metadataOnly": true
             }
         }
     ],
@@ -21,7 +26,7 @@
                 "vnext": [
                     {
                         "address": "127.0.0.1",
-                        "port": 443,
+                        "port": 8081,
                         "users": [
                             {
                                 "id": "3b5390c5-52a2-472d-8dc2-103ef508be6c",
@@ -33,14 +38,83 @@
                 ]
             },
             "streamSettings": {
-                "network": "tcp",
-                "security": "none"
-            },
-            "mux": {
-                "enabled": true,
-                "concurrency": 1024
+                "network": "xhttp",
+                "security": "reality",
+                "sockopt": {
+                    "tcpKeepAliveIdle": 120,
+                    "tcpKeepAliveInterval": 30,
+                    "tcpKeepAliveCount": 3,
+                    "tcpNoDelay": true,
+                    "tcpFastOpen": true,
+                    "mark": 255
+                },
+                "xhttpSettings": {
+                    "host": "www.cloudflare.com",
+                    "path": "/api",
+                    "mode": "auto",
+                    "idle_timeout": "600s",
+                    "extra": {
+                        "headers": {
+                            "Connection": "keep-alive",
+                            "Keep-Alive": "timeout=600, max=10000"
+                        },
+                        "xPaddingBytes": "50-100",
+                        "noGRPCHeader": false,
+                        "scMinPostsIntervalMs": 10,
+                        "maxIdleTime": "600s",
+                        "health": {
+                            "ping": {
+                                "interval": "30s",
+                                "timeout": "5s"
+                            },
+                            "enable": true
+                        },
+                        "xmux": {
+                            "maxConcurrency": 256,
+                            "hMaxRequestTimes": 10000,
+                            "hMaxReusableSecs": 21600,
+                            "keepAliveInterval": "30s",
+                            "keepAliveTimeout": "60s",
+                            "idleTimeout": "600s",
+                            "healthCheck": true
+                        }
+                    }
+                },
+                "realitySettings": {
+                    "show": false,
+                    "fingerprint": "chrome",
+                    "serverName": "www.cloudflare.com",
+                    "publicKey": "eZfl07Tg9UII29GaS23QXqB15aqrJ4Khm0vKJIcaMCo",
+                    "shortId": "77c2358dc476ae9e",
+                    "spiderX": ""
+                }
             },
             "tag": "proxy"
         }
-    ]
+    ],
+    "policy": {
+        "levels": {
+            "0": {
+                "handshake": 16,
+                "connIdle": 1800,
+                "uplinkOnly": 30,
+                "downlinkOnly": 300,
+                "statsUserUplink": false,
+                "statsUserDownlink": false,
+                "bufferSize": 64
+            }
+        },
+        "system": {
+            "statsInboundUplink": false,
+            "statsInboundDownlink": false,
+            "statsOutboundUplink": false,
+            "statsOutboundDownlink": false
+        }
+    },
+    "observatory": {
+        "subjectSelector": ["proxy"],
+        "probeInterval": "60s",
+        "probeURL": "https://www.cloudflare.com/",
+        "enableConcurrency": true
+    }
 }
