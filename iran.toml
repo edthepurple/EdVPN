@@ -6,4 +6,4 @@ default_token = "edvpn"
 type = "tcp"
 
 [server.services.xray]
-bind_addr = "0.0.0.0:8081
+bind_addr = "0.0.0.0:8081"
