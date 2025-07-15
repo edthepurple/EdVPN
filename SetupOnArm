@@ -28,7 +28,7 @@ Restart=always
 WantedBy=multi-user.target" > /etc/systemd/system/openvpn.service'
 sudo systemctl daemon-reload
 cd ~
-git clone https://github.com/fac/auth-script-openvpn.git
+git clone https://github.com/edthepurple/auth-script-openvpn.git
 cd auth-script-openvpn
 make
 mv openvpn-plugin-auth-script.so /usr/local/lib/openvpn/plugins/
