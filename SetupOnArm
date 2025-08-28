@@ -49,3 +49,13 @@ Restart=always
 WantedBy=multi-user.target" > /etc/systemd/system/openvpn-tcp.service'
 sudo systemctl daemon-reload
 systemctl enable openvpn-tcp
+cd ~
+git clone https://github.com/OpenVPN/ovpn-dco
+cd ovpn-dco
+make
+make install
+modprobe ovpn-dco-v2
+echo "ovpn-dco-v2" | tee /etc/modules-load.d/ovpn-dco.conf
+depmod -a
+update-initramfs -u
+lsmod | grep ovpn
