@@ -1,6 +1,7 @@
 apt update -y
 apt upgrade -y
 apt install libtool autoconf libnl-genl-3-dev pkg-config libcap-ng-dev libssl-dev liblz4-dev liblzo2-dev libpam0g-dev libtool-bin build-essential -y
+sudo apt install linux-headers-$(uname -r)
 wget https://swupdate.openvpn.org/community/releases/openvpn-2.6.14.tar.gz
 tar -xvf openvpn-2.6.14.tar.gz
 cd openvpn-2.6.14
