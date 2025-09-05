@@ -6,7 +6,7 @@ wget https://swupdate.openvpn.org/community/releases/openvpn-2.6.14.tar.gz
 tar -xvf openvpn-2.6.14.tar.gz
 cd openvpn-2.6.14
 autoreconf -vi
-./configure
+./configure enable_async_push=yes
 make -j2
 make install
 openvpn --version
