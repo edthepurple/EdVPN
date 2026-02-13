@@ -2,17 +2,17 @@ apt update -y
 apt upgrade -y
 apt install libtool autoconf libnl-genl-3-dev pkg-config libcap-ng-dev libssl-dev liblz4-dev liblzo2-dev libpam0g-dev libtool-bin build-essential -y
 sudo apt install linux-headers-$(uname -r)
-wget https://swupdate.openvpn.org/community/releases/openvpn-2.6.19.tar.gz
-tar -xvf openvpn-2.6.19.tar.gz
-cd openvpn-2.6.19
+wget https://swupdate.openvpn.org/community/releases/openvpn-2.7.0.tar.gz
+tar -xvf openvpn-2.7.0.tar.gz
+cd openvpn-2.7.0
 autoreconf -vi
 ./configure enable_async_push=yes
 make -j2
 make install
 openvpn --version
 cd ~
-rm -f openvpn-2.6.19.tar.gz
-rm -rf openvpn-2.6.19
+rm -f openvpn-2.7.0.tar.gz
+rm -rf openvpn-2.7.0
 sudo sh -c 'echo "[Unit]
 Description=OpenVPN service
 After=network.target
