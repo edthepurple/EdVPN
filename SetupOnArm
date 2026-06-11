@@ -1,18 +1,24 @@
 apt update -y
 apt upgrade -y
-apt install libtool autoconf libnl-genl-3-dev pkg-config libcap-ng-dev libssl-dev liblz4-dev liblzo2-dev libpam0g-dev libtool-bin build-essential -y
+apt install build-essential -y
+git clone https://github.com/OpenVPN/ovpn-backports.git
+cd ovpn-backports/
+bash backports-ctl.sh get-ovpn
+make
+make install
+apt install libtool autoconf libnl-genl-3-dev pkg-config libcap-ng-dev libssl-dev liblz4-dev liblzo2-dev libpam0g-dev libtool-bin -y
 sudo apt install linux-headers-$(uname -r)
 wget https://swupdate.openvpn.org/community/releases/openvpn-2.7.4.tar.gz
 tar -xvf openvpn-2.7.4.tar.gz
 cd openvpn-2.7.4
 autoreconf -vi
 ./configure enable_async_push=yes
-make -j2
+make
 make install
-openvpn --version
 cd ~
 rm -f openvpn-2.7.4.tar.gz
 rm -rf openvpn-2.7.4
+rm -rf ovpn-backports
 sudo sh -c 'echo "[Unit]
 Description=OpenVPN service
 After=network.target
@@ -29,34 +35,9 @@ Restart=always
 WantedBy=multi-user.target" > /etc/systemd/system/openvpn.service'
 sudo systemctl daemon-reload
 cd ~
-git clone https://github.com/edthepurple/auth-script-openvpn.git
+git clone https://github.com/fac/auth-script-openvpn.git
 cd auth-script-openvpn
 make
 mv openvpn-plugin-auth-script.so /usr/local/lib/openvpn/plugins/
 systemctl enable openvpn
-sudo sh -c 'echo "[Unit]
-Description=OpenVPN TCP service
-After=network.target
-
-[Service]
-Type=simple
-User=root
-Group=root
-WorkingDirectory=/etc/openvpn
-ExecStart=/usr/local/sbin/openvpn --config /etc/openvpn/tcp.conf
-Restart=always
-
-[Install]
-WantedBy=multi-user.target" > /etc/systemd/system/openvpn-tcp.service'
-sudo systemctl daemon-reload
-systemctl enable openvpn-tcp
-cd ~
-git clone https://github.com/OpenVPN/ovpn-dco
-cd ovpn-dco
-make
-make install
-modprobe ovpn-dco-v2
-echo "ovpn-dco-v2" | tee /etc/modules-load.d/ovpn-dco.conf
-depmod -a
-update-initramfs -u
-lsmod | grep ovpn
+openvpn --version
