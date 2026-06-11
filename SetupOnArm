@@ -6,7 +6,7 @@ cd ovpn-backports/
 bash backports-ctl.sh get-ovpn
 make
 make install
-apt install libtool autoconf libnl-genl-3-dev pkg-config libcap-ng-dev libssl-dev liblz4-dev liblzo2-dev libpam0g-dev libtool-bin -y
+apt install libtool autoconf libnl-genl-3-dev pkg-config libcap-ng-dev libssl-dev liblz4-dev liblzo2-dev libpam0g-dev libtool-bin mysql-client htop nano nload net-tools -y
 sudo apt install linux-headers-$(uname -r)
 wget https://swupdate.openvpn.org/community/releases/openvpn-2.7.4.tar.gz
 tar -xvf openvpn-2.7.4.tar.gz
@@ -15,10 +15,7 @@ autoreconf -vi
 ./configure enable_async_push=yes
 make
 make install
-cd ~
-rm -f openvpn-2.7.4.tar.gz
-rm -rf openvpn-2.7.4
-rm -rf ovpn-backports
+sudo mkdir -p /etc/openvpn
 sudo sh -c 'echo "[Unit]
 Description=OpenVPN service
 After=network.target
@@ -40,4 +37,16 @@ cd auth-script-openvpn
 make
 mv openvpn-plugin-auth-script.so /usr/local/lib/openvpn/plugins/
 systemctl enable openvpn
+modprobe ovpn
 openvpn --version
+grep -qxF ovpn /etc/modules-load.d/ovpn.conf 2>/dev/null || echo ovpn | sudo tee -a /etc/modules-load.d/ovpn.conf >/dev/null
+cd ~
+git clone https://github.com/edthepurple/auth.git
+cd auth
+make
+mv auth /usr/bin/
+rm -f openvpn-2.7.4.tar.gz
+rm -rf openvpn-2.7.4
+rm -rf ovpn-backports
+rm -rf auth-script-openvpn
+rm -rf auth
