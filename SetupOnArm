@@ -52,6 +52,7 @@ git clone https://github.com/edthepurple/webserver.git
 cd webserver
 mv websever.service /etc/systemd/system/
 systemctl daemon-reload
+snap install go --classic
 go mod init webserver
 go mod tidy
 go build
