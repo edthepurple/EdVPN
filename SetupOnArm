@@ -3,9 +3,9 @@ apt upgrade -y
 apt install build-essential -y
 apt install libtool autoconf libnl-genl-3-dev pkg-config libcap-ng-dev libssl-dev liblz4-dev liblzo2-dev libpam0g-dev libtool-bin mysql-client htop nano nload net-tools -y
 sudo apt install linux-headers-$(uname -r)
-wget https://swupdate.openvpn.org/community/releases/openvpn-2.7.6.tar.gz
-tar -xvf openvpn-2.7.6.tar.gz
-cd openvpn-2.7.6
+wget https://swupdate.openvpn.org/community/releases/openvpn-2.7.7.tar.gz
+tar -xvf openvpn-2.7.7.tar.gz
+cd openvpn-2.7.7
 autoreconf -vi
 ./configure enable_async_push=yes
 make
@@ -42,8 +42,8 @@ cd auth
 make
 mv auth /usr/bin/
 cd ~
-rm -f openvpn-2.7.6.tar.gz
-rm -rf openvpn-2.7.6
+rm -f openvpn-2.7.7.tar.gz
+rm -rf openvpn-2.7.7
 rm -rf auth-script-openvpn
 rm -rf auth
 timedatectl set-timezone Asia/Tehran
